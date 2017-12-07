@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
+
 
 class LoginController extends Controller
 {
@@ -27,14 +29,19 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin/home';
+
+
+    public function __construct()
+    {
+        // $this->middleware('guest:admin')->except('logout');
+    }
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-
     public function showLoginForm()
     {
         return view('admin.login');
@@ -51,8 +58,8 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-    public function __construct()
+    protected function guard()
     {
-        $this->middleware('guest')->except('logout');
+        return Auth::guard('admin');
     }
 }
